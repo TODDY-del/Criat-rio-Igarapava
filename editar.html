@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Pássaro — Criatório Igarapava</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <nav class="sidebar" role="navigation">
+    <button class="sidebar-btn" onclick="window.location.href='index.html'" title="Lista de Pássaros">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+      </svg>
+      <span class="tooltip">LISTA DE PÁSSAROS</span>
+    </button>
+    <button class="sidebar-btn active" title="Editar Pássaro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      <span class="tooltip">EDITAR PÁSSARO</span>
+    </button>
+  </nav>
+
+  <!-- ── Main Content ──────────────────────────────────── -->
+  <main class="main-content">
+
+    <div class="topbar">
+      <span class="topbar-title">CRIATÓRIO IGARAPAVA — CANTO E REPETIÇÃO DE CURIÓS</span>
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        <span id="status-text">ONLINE</span>
+      </div>
+    </div>
+
+    <section class="page-area">
+
+      <div class="section-header">
+        <h1 class="section-title" id="page-title">Editar Pássaro</h1>
+        <p class="section-subtitle">Altere os campos desejados e clique em Salvar Alterações.</p>
+      </div>
+
+      <!-- Área de erro -->
+      <div id="editar-erro" style="display:none; background:rgba(237,50,55,.07); border:1px solid rgba(237,50,55,.3); padding:20px 24px; font-size:13px; color:#b91c1c; line-height:1.8; margin-bottom:20px;"></div>
+
+      <div style="max-width:1200px; margin:0 auto; width:100%;">
+        <form id="form-editar" novalidate>
+          <div class="ficha-wrapper" style="position:relative; width:100%; aspect-ratio:12050/9050;
+               background-image:url('assets/ficha_original.png');
+               background-size:contain; background-repeat:no-repeat; background-position:center;
+               box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06); border-radius:8px;">
+
+            <!-- Dados principais -->
+            <input type="text" id="e-nome"           name="nome"           autocomplete="off" required
+              style="position:absolute; top:20.37%; left:14%;    width:29.37%; height:7.81%;" class="input-transparente" title="Nome" />
+            <input type="text" id="e-codigo"         name="codigo"         autocomplete="off"
+              style="position:absolute; top:29.88%; left:1.69%;  width:41.68%; height:7.81%;" class="input-transparente" title="Código" />
+            <input type="text" id="e-dataNascimento" name="dataNascimento" autocomplete="off" inputmode="numeric" maxlength="10"
+              style="position:absolute; top:20.37%; left:52.80%; width:41.68%; height:7.81%;" class="input-transparente" title="Data de Nascimento" />
+            <select id="e-sexo" name="sexo" required
+              style="position:absolute; top:29.88%; left:65%;    width:29.48%; height:7.81%; cursor:pointer;" class="input-transparente" title="Sexo">
+              <option value="MACHO">MACHO</option>
+              <option value="FÊMEA">FÊMEA</option>
+            </select>
+
+            <!-- Campo 5 — Nome do Pássaro -->
+            <input type="text" id="e-nomePassaro" name="nomePassaro" autocomplete="off" required
+              style="position:absolute; top:63.91%; left:1.56%;  width:37.22%; height:10.08%;" class="input-transparente campo5-borda" title="Nome do Pássaro" />
+
+            <!-- Árvore genealógica -->
+            <input type="text" id="e-paiPassaro5"  name="paiPassaro5"  autocomplete="off"
+              style="position:absolute; top:49.84%; left:19.13%; width:24.81%; height:8.88%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro5"  name="maePassaro5"  autocomplete="off"
+              style="position:absolute; top:79.74%; left:19.13%; width:24.81%; height:8.85%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro6"  name="paiPassaro6"  autocomplete="off"
+              style="position:absolute; top:42.48%; left:45.81%; width:24.81%; height:8.95%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro6"  name="maePassaro6"  autocomplete="off"
+              style="position:absolute; top:57.70%; left:45.81%; width:24.81%; height:9.00%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro7"  name="paiPassaro7"  autocomplete="off"
+              style="position:absolute; top:72.68%; left:45.81%; width:24.81%; height:8.99%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro7"  name="maePassaro7"  autocomplete="off"
+              style="position:absolute; top:87.73%; left:45.81%; width:24.81%; height:8.90%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro8"  name="paiPassaro8"  autocomplete="off"
+              style="position:absolute; top:39.74%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro8"  name="maePassaro8"  autocomplete="off"
+              style="position:absolute; top:47.30%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro9"  name="paiPassaro9"  autocomplete="off"
+              style="position:absolute; top:54.82%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro9"  name="maePassaro9"  autocomplete="off"
+              style="position:absolute; top:62.32%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro10" name="paiPassaro10" autocomplete="off"
+              style="position:absolute; top:69.54%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro10" name="maePassaro10" autocomplete="off"
+              style="position:absolute; top:77.06%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-paiPassaro11" name="paiPassaro11" autocomplete="off"
+              style="position:absolute; top:84.67%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+            <input type="text" id="e-maePassaro11" name="maePassaro11" autocomplete="off"
+              style="position:absolute; top:92.08%; left:72.17%; width:24.81%; height:6.69%;" class="input-transparente" />
+          </div>
+
+          <div class="form-actions" style="justify-content:flex-end; margin-top:24px;">
+            <button type="button" class="btn btn-secondary" onclick="history.back()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              CANCELAR
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-salvar" onclick="salvar()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              SALVAR ALTERAÇÕES
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </section>
+  </main>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <div class="loading-overlay" id="loading"><div class="loading-spinner"></div></div>
+
+  <script type="module">
+    import { salvarPassaro, buscarPassaro } from './js/cadastro.js';
+    import { FIREBASE_CONFIGURED } from './js/firebase-config.js';
+
+    const MAPA = {
+      'e-nome':           'nome',
+      'e-codigo':         'codigo',
+      'e-dataNascimento': 'dataNascimento',
+      'e-sexo':           'sexo',
+      'e-nomePassaro':    'nomePassaro',
+      'e-paiPassaro5':    'paiPassaro5',
+      'e-maePassaro5':    'maePassaro5',
+      'e-paiPassaro6':    'paiPassaro6',
+      'e-maePassaro6':    'maePassaro6',
+      'e-paiPassaro7':    'paiPassaro7',
+      'e-maePassaro7':    'maePassaro7',
+      'e-paiPassaro8':    'paiPassaro8',
+      'e-maePassaro8':    'maePassaro8',
+      'e-paiPassaro9':    'paiPassaro9',
+      'e-maePassaro9':    'maePassaro9',
+      'e-paiPassaro10':   'paiPassaro10',
+      'e-maePassaro10':   'maePassaro10',
+      'e-paiPassaro11':   'paiPassaro11',
+      'e-maePassaro11':   'maePassaro11',
+    };
+
+    let editId = null;
+
+    // ── Init ─────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (!FIREBASE_CONFIGURED) document.getElementById('status-text').textContent = 'OFFLINE';
+
+      document.getElementById('e-dataNascimento').addEventListener('input', mascaraData);
+      document.getElementById('e-sexo').addEventListener('change', atualizarBorda);
+
+      setLoading(true);
+      try {
+        // 1. Tenta sessionStorage
+        let dados = null;
+        const ssId  = sessionStorage.getItem('editar_id');
+        const ssDados = sessionStorage.getItem('editar_dados');
+
+        if (ssId && ssDados) {
+          try {
+            dados  = JSON.parse(ssDados);
+            editId = ssId;
+            sessionStorage.removeItem('editar_id');
+            sessionStorage.removeItem('editar_dados');
+          } catch {}
+        }
+
+        // 2. Fallback: URL param
+        if (!dados) {
+          const urlId = new URLSearchParams(location.search).get('id');
+          if (urlId) {
+            editId = urlId;
+            dados  = await buscarPassaro(urlId);
+          }
+        }
+
+        if (!editId || !dados) {
+          mostrarErro('Dados não encontrados. <a href="index.html" style="color:var(--cor-destaque)">← Voltar para a lista</a>');
+          document.getElementById('btn-salvar').disabled = true;
+          return;
+        }
+
+        document.getElementById('page-title').textContent = 'Editar: ' + (dados.nomePassaro || dados.nome || 'Pássaro');
+
+        for (const [id, chave] of Object.entries(MAPA)) {
+          const el = document.getElementById(id);
+          if (el && dados[chave] != null) el.value = dados[chave];
+        }
+        atualizarBorda();
+      } catch(e) {
+        mostrarErro('Erro ao carregar: ' + e.message);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ── Salvar alterações ─────────────────────────────────
+    window.salvar = async function() {
+      const dados = {
+        nome:           document.getElementById('e-nome').value.trim(),
+        codigo:         document.getElementById('e-codigo').value.trim(),
+        dataNascimento: document.getElementById('e-dataNascimento').value.trim(),
+        sexo:           document.getElementById('e-sexo').value,
+        nomePassaro:    document.getElementById('e-nomePassaro').value.trim(),
+        paiPassaro5:    document.getElementById('e-paiPassaro5').value.trim(),
+        maePassaro5:    document.getElementById('e-maePassaro5').value.trim(),
+        paiPassaro6:    document.getElementById('e-paiPassaro6').value.trim(),
+        maePassaro6:    document.getElementById('e-maePassaro6').value.trim(),
+        paiPassaro7:    document.getElementById('e-paiPassaro7').value.trim(),
+        maePassaro7:    document.getElementById('e-maePassaro7').value.trim(),
+        paiPassaro8:    document.getElementById('e-paiPassaro8').value.trim(),
+        maePassaro8:    document.getElementById('e-maePassaro8').value.trim(),
+        paiPassaro9:    document.getElementById('e-paiPassaro9').value.trim(),
+        maePassaro9:    document.getElementById('e-maePassaro9').value.trim(),
+        paiPassaro10:   document.getElementById('e-paiPassaro10').value.trim(),
+        maePassaro10:   document.getElementById('e-maePassaro10').value.trim(),
+        paiPassaro11:   document.getElementById('e-paiPassaro11').value.trim(),
+        maePassaro11:   document.getElementById('e-maePassaro11').value.trim(),
+      };
+
+      if (!dados.nome)        { showToast('O campo NOME é obrigatório.', 'error'); return; }
+      if (!dados.nomePassaro) { showToast('O campo NOME DO PÁSSARO é obrigatório.', 'error'); return; }
+
+      setLoading(true);
+      try {
+        await salvarPassaro(dados, editId);
+
+        // Atualiza sessionStorage para a ficha mostrar os dados novos
+        sessionStorage.setItem('ficha_id',    editId);
+        sessionStorage.setItem('ficha_dados', JSON.stringify({ ...dados, id: editId }));
+
+        showToast('Pássaro atualizado com sucesso!');
+        setTimeout(() => { window.location.href = 'ficha.html?id=' + editId; }, 800);
+      } catch (err) {
+        console.error('[editar] Erro ao salvar:', err);
+        showToast('Erro ao salvar: ' + err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // ── Borda colorida campo 5 ────────────────────────────
+    function atualizarBorda() {
+      const sexo  = document.getElementById('e-sexo').value;
+      const campo = document.getElementById('e-nomePassaro');
+      campo.classList.remove('borda-femea', 'borda-macho');
+      campo.classList.add(sexo === 'FÊMEA' ? 'borda-femea' : 'borda-macho');
+    }
+
+    // ── Máscara dd/mm/aaaa ────────────────────────────────
+    function mascaraData(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 8);
+      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
+      if (v.length >= 6) v = v.substring(0,5) + '/' + v.substring(5);
+      e.target.value = v;
+    }
+
+    // ── Helpers ──────────────────────────────────────────
+    function mostrarErro(html) {
+      const el = document.getElementById('editar-erro');
+      el.innerHTML = html;
+      el.style.display = 'block';
+    }
+
+    function showToast(msg, tipo = 'success') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `toast ${tipo}`;
+      t.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          ${tipo === 'error'
+            ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
+            : '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'}
+        </svg>
+        ${msg}`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    function setLoading(v) {
+      document.getElementById('loading').style.display = v ? 'flex' : 'none';
+    }
+  </script>
+
+</body>
+</html>

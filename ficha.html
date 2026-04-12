@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ficha do Pássaro — Criatório Igarapava</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- html2canvas: converte o div HTML em imagem PNG real -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    /* ── Span de dado sobreposto na ficha ─── */
+    .dado-ficha {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;              /* centralizado por padrão */
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      color: #7B4831;
+      font-size: clamp(14px, 3.8vw, 58px);
+      padding: 0 12px;
+      box-sizing: border-box;
+      overflow: hidden;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    /* Nome do proprietário e Sexo ficam à esquerda */
+    #span-nome, #span-sexo {
+      justify-content: flex-start;
+    }
+    /* Genealogia nível 2 (campos mais estreitos da direita) */
+    .dado-ficha.campo-pequeno {
+      font-size: clamp(11px, 2.8vw, 42px);
+    }
+
+    /* Campo 5 — borda colorida conforme sexo */
+    .dado-ficha.campo5-femea {
+      border: 3px solid #ED3237;
+      border-radius: 12px;
+    }
+    .dado-ficha.campo5-macho {
+      border: 3px solid #0000FF;
+      border-radius: 12px;
+    }
+
+    /* ── Toolbar ─────────────────────────── */
+    .ficha-toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Info bar ────────────────────────── */
+    .ficha-info-bar {
+      background: var(--cor-painel);
+      border: 1px solid #1f1f1f;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+    .ficha-info-item { display: flex; flex-direction: column; gap: 2px; }
+    .ficha-info-label { font-size: 11px; color: var(--cor-texto-dim); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    .ficha-info-value { font-size: 16px; font-weight: 600; color: var(--cor-texto); }
+    .ficha-info-value.macho { color: #2563eb; }
+    .ficha-info-value.femea { color: #dc2626; }
+
+    /* ── Print ───────────────────────────── */
+    @media print {
+      .sidebar,
+      .topbar,
+      .ficha-toolbar,
+      .ficha-info-bar,
+      .section-header,
+      .toast-container,
+      .loading-overlay { display: none !important; }
+
+      body, html { margin: 0 !important; padding: 0 !important; }
+      .main-content { margin: 0 !important; padding: 0 !important; }
+      .page-area { padding: 0 !important; margin: 0 !important; }
+
+      .ficha-print-area {
+        width: 100vw !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Sidebar ──────────────────────────────────────── -->
+  <nav class="sidebar" role="navigation">
+    <button class="sidebar-btn" onclick="window.location.href='index.html'" title="Lista de Pássaros">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+      </svg>
+      <span class="tooltip">LISTA DE PÁSSAROS</span>
+    </button>
+    <button class="sidebar-btn" id="btn-editar-sidebar" onclick="irParaEdicao()" title="Editar Pássaro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      <span class="tooltip">EDITAR PÁSSARO</span>
+    </button>
+  </nav>
+
+  <!-- ── Main Content ──────────────────────────────── -->
+  <main class="main-content">
+
+    <div class="topbar">
+      <span class="topbar-title">CRIATÓRIO IGARAPAVA — CANTO E REPETIÇÃO DE CURIÓS</span>
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        <span id="status-text">ONLINE</span>
+      </div>
+    </div>
+
+    <section class="page-area">
+
+      <div class="section-header">
+        <h1 class="section-title" id="ficha-titulo">Ficha do Pássaro</h1>
+        <p class="section-subtitle" id="ficha-subtitulo">CARREGANDO...</p>
+      </div>
+
+      <!-- Info bar -->
+      <div class="ficha-info-bar" id="ficha-info-bar" style="display:none">
+        <div class="ficha-info-item">
+          <span class="ficha-info-label">Proprietário</span>
+          <span class="ficha-info-value" id="info-nome">—</span>
+        </div>
+        <div class="ficha-info-item">
+          <span class="ficha-info-label">Código</span>
+          <span class="ficha-info-value" id="info-codigo">—</span>
+        </div>
+        <div class="ficha-info-item">
+          <span class="ficha-info-label">Nascimento</span>
+          <span class="ficha-info-value" id="info-data">—</span>
+        </div>
+        <div class="ficha-info-item">
+          <span class="ficha-info-label">Sexo</span>
+          <span class="ficha-info-value" id="info-sexo">—</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="ficha-toolbar" id="ficha-toolbar" style="display:none">
+        <button class="btn btn-primary" onclick="imprimir()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          IMPRIMIR
+        </button>
+        <button class="btn btn-secondary" onclick="baixarPNG()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          BAIXAR PNG
+        </button>
+        <button class="btn btn-secondary" onclick="irParaEdicao()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          EDITAR
+        </button>
+      </div>
+
+      <!-- Área de erro -->
+      <div id="ficha-erro" style="display:none; background:rgba(237,50,55,.07); border:1px solid rgba(237,50,55,.3); padding:20px 24px; font-size:13px; color:#b91c1c; line-height:1.8;">
+      </div>
+
+      <!-- Ficha: PNG de fundo + spans sobrepostos -->
+      <div id="ficha-wrapper-container" style="display:none; max-width:1200px; margin:0 auto; width:100%;">
+        <div class="ficha-print-area" id="ficha-wrapper-dados"
+          style="position:relative; width:100%; aspect-ratio:12050/9050;
+                 background-image:url('assets/ficha_original.png');
+                 background-size:contain; background-repeat:no-repeat;
+                 background-position:center; border-radius:8px;
+                 box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);">
+
+          <!-- Dados principais -->
+          <span id="span-nome"           class="dado-ficha" style="top:20.37%;left:14%;    width:29.37%;height:7.81%;"></span>
+          <span id="span-codigo"         class="dado-ficha" style="top:29.88%;left:1.69%;  width:41.68%;height:7.81%;"></span>
+          <span id="span-dataNascimento" class="dado-ficha" style="top:20.37%;left:52.80%; width:41.68%;height:7.81%;"></span>
+          <span id="span-sexo"           class="dado-ficha" style="top:29.88%;left:65%;    width:29.48%;height:7.81%;"></span>
+
+          <!-- Campo 5: Nome do pássaro (borda colorida) -->
+          <span id="span-nomePassaro"    class="dado-ficha" style="top:63.91%;left:1.56%;  width:37.22%;height:10.08%;font-size:clamp(18px,5.5vw,80px);"></span>
+
+          <!-- Árvore genealógica -->
+          <span id="span-paiPassaro5"    class="dado-ficha" style="top:49.84%;left:19.13%; width:24.81%;height:8.88%;"></span>
+          <span id="span-maePassaro5"    class="dado-ficha" style="top:79.74%;left:19.13%; width:24.81%;height:8.85%;"></span>
+
+          <span id="span-paiPassaro6"    class="dado-ficha" style="top:42.48%;left:45.81%; width:24.81%;height:8.95%;"></span>
+          <span id="span-maePassaro6"    class="dado-ficha" style="top:57.70%;left:45.81%; width:24.81%;height:9.00%;"></span>
+          <span id="span-paiPassaro7"    class="dado-ficha" style="top:72.68%;left:45.81%; width:24.81%;height:8.99%;"></span>
+          <span id="span-maePassaro7"    class="dado-ficha" style="top:87.73%;left:45.81%; width:24.81%;height:8.90%;"></span>
+
+          <span id="span-paiPassaro8"    class="dado-ficha campo-pequeno" style="top:39.74%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-maePassaro8"    class="dado-ficha campo-pequeno" style="top:47.30%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-paiPassaro9"    class="dado-ficha campo-pequeno" style="top:54.82%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-maePassaro9"    class="dado-ficha campo-pequeno" style="top:62.32%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-paiPassaro10"   class="dado-ficha campo-pequeno" style="top:69.54%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-maePassaro10"   class="dado-ficha campo-pequeno" style="top:77.06%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-paiPassaro11"   class="dado-ficha campo-pequeno" style="top:84.67%;left:72.17%; width:24.81%;height:6.69%;"></span>
+          <span id="span-maePassaro11"   class="dado-ficha campo-pequeno" style="top:92.08%;left:72.17%; width:24.81%;height:6.69%;"></span>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <div class="loading-overlay" id="loading"><div class="loading-spinner"></div></div>
+
+  <script type="module">
+    import { buscarPassaro } from './js/cadastro.js';
+    import { FIREBASE_CONFIGURED } from './js/firebase-config.js';
+
+    const params    = new URLSearchParams(location.search);
+    let   passaroId = params.get('id');
+    let   dadosAtivos = null; // guarda os dados carregados para uso nas ações
+
+    // Fallback: se não veio ID na URL, tenta recuperar do sessionStorage
+    if (!passaroId) {
+      passaroId = sessionStorage.getItem('ficha_id') || null;
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      if (!FIREBASE_CONFIGURED) {
+        document.getElementById('status-text').textContent = 'OFFLINE';
+      }
+
+      setLoading(true);
+      try {
+        let dados = null;
+
+        // Tenta primeiro o sessionStorage (recém salvo) para carregamento instantâneo
+        const dadosSessao = sessionStorage.getItem('ficha_dados');
+        if (dadosSessao && passaroId) {
+          try {
+            const parsed = JSON.parse(dadosSessao);
+            if (parsed.id === passaroId) {
+              dados = parsed;
+              sessionStorage.removeItem('ficha_dados');
+              sessionStorage.removeItem('ficha_id');
+            }
+          } catch {}
+        }
+
+        // Se não veio do sessionStorage, busca no banco
+        if (!dados) {
+          if (!passaroId) {
+            mostrarErro('ID não informado na URL. <a href="index.html" style="color:var(--cor-destaque)">← Voltar para a lista</a>');
+            return;
+          }
+          console.log('[ficha] Buscando no banco, ID:', passaroId);
+          try {
+            dados = await buscarPassaro(passaroId);
+          } catch (fetchErr) {
+            console.error('[ficha] Erro ao buscar pássaro:', fetchErr);
+            mostrarErro('Erro ao buscar dados: ' + fetchErr.message + '<br><a href="index.html" style="color:var(--cor-destaque)">← Voltar para a lista</a>');
+            return;
+          }
+          console.log('[ficha] Dados recebidos:', dados);
+          if (!dados) {
+            mostrarErro('Pássaro não encontrado (ID: ' + passaroId + '). Pode ter sido deletado. <a href="index.html" style="color:var(--cor-destaque)">← Voltar para a lista</a>');
+            return;
+          }
+        }
+
+        dadosAtivos = dados;
+        preencherFicha(dados);
+        // Após preencher, ajusta fontes para caber sem cortar
+        requestAnimationFrame(() => {
+          ajustarFontes();
+          // Se veio da lista com pedido de impressão automática
+          if (sessionStorage.getItem('ficha_autoprint') === '1') {
+            sessionStorage.removeItem('ficha_autoprint');
+            // Espera o PNG de fundo carregar antes de capturar com html2canvas
+            const img = new Image();
+            img.onload = () => setTimeout(() => imprimir(), 300);
+            img.onerror = () => setTimeout(() => imprimir(), 300);
+            img.src = 'assets/ficha_original.png';
+          }
+        });
+      } catch (e) {
+        mostrarErro('Erro ao carregar ficha: ' + e.message);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    function preencherFicha(dados) {
+      // Título e subtítulo
+      document.getElementById('ficha-titulo').textContent    = dados.nomePassaro || dados.nome || 'Pássaro';
+      document.getElementById('ficha-subtitulo').textContent = dados.codigo ? 'CÓDIGO: ' + dados.codigo : '';
+
+      // Info bar
+      document.getElementById('info-nome').textContent   = dados.nome || '—';
+      document.getElementById('info-codigo').textContent = dados.codigo || '—';
+      document.getElementById('info-data').textContent   = dados.dataNascimento || '—';
+      const infoSexo = document.getElementById('info-sexo');
+      infoSexo.textContent  = dados.sexo || '—';
+      infoSexo.className    = 'ficha-info-value ' + (dados.sexo === 'FÊMEA' ? 'femea' : 'macho');
+
+      // Preencher spans com os dados
+      const campos = {
+        'span-nome':           dados.nome,
+        'span-codigo':         dados.codigo,
+        'span-dataNascimento': dados.dataNascimento,
+        'span-sexo':           dados.sexo,
+        'span-nomePassaro':    dados.nomePassaro,
+        'span-paiPassaro5':    dados.paiPassaro5,
+        'span-maePassaro5':    dados.maePassaro5,
+        'span-paiPassaro6':    dados.paiPassaro6,
+        'span-maePassaro6':    dados.maePassaro6,
+        'span-paiPassaro7':    dados.paiPassaro7,
+        'span-maePassaro7':    dados.maePassaro7,
+        'span-paiPassaro8':    dados.paiPassaro8,
+        'span-maePassaro8':    dados.maePassaro8,
+        'span-paiPassaro9':    dados.paiPassaro9,
+        'span-maePassaro9':    dados.maePassaro9,
+        'span-paiPassaro10':   dados.paiPassaro10,
+        'span-maePassaro10':   dados.maePassaro10,
+        'span-paiPassaro11':   dados.paiPassaro11,
+        'span-maePassaro11':   dados.maePassaro11,
+      };
+
+      for (const [id, valor] of Object.entries(campos)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = valor || '';
+      }
+
+      // Borda colorida no campo 5 (nome do pássaro)
+      const spanNomePassaro = document.getElementById('span-nomePassaro');
+      spanNomePassaro.classList.remove('campo5-femea', 'campo5-macho');
+      spanNomePassaro.classList.add(dados.sexo === 'FÊMEA' ? 'campo5-femea' : 'campo5-macho');
+
+      // Mostrar elementos
+      document.getElementById('ficha-info-bar').style.display       = 'flex';
+      document.getElementById('ficha-toolbar').style.display        = 'flex';
+      document.getElementById('ficha-wrapper-container').style.display = 'block';
+    }
+
+    // ── Reduz fonte de cada campo até o texto caber ───────
+    function ajustarFontes() {
+      // Campos excluídos: código, data e sexo (nunca transbordam)
+      const ids = [
+        'span-nome',
+        'span-nomePassaro',
+        'span-paiPassaro5',  'span-maePassaro5',
+        'span-paiPassaro6',  'span-maePassaro6',
+        'span-paiPassaro7',  'span-maePassaro7',
+        'span-paiPassaro8',  'span-maePassaro8',
+        'span-paiPassaro9',  'span-maePassaro9',
+        'span-paiPassaro10', 'span-maePassaro10',
+        'span-paiPassaro11', 'span-maePassaro11',
+      ];
+
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || !el.textContent.trim()) return;
+
+        // Pega o tamanho atual calculado pelo CSS (clamp/vw)
+        let tamanho = parseFloat(window.getComputedStyle(el).fontSize);
+
+        // Reduz em 0.5px por vez até o texto não ultrapassar a largura do span
+        while (el.scrollWidth > el.clientWidth && tamanho > 7) {
+          tamanho -= 0.5;
+          el.style.fontSize = tamanho + 'px';
+        }
+      });
+    }
+
+    function mostrarErro(html) {
+      const el = document.getElementById('ficha-erro');
+      el.innerHTML = html;
+      el.style.display = 'block';
+    }
+
+    function setLoading(v) {
+      document.getElementById('loading').style.display = v ? 'flex' : 'none';
+    }
+
+    // ── Gerar imagem PNG do div (fundo + dados) ───────────
+    async function gerarImagemFicha() {
+      const wrapper = document.getElementById('ficha-wrapper-dados');
+      setLoading(true);
+      try {
+        const canvas = await html2canvas(wrapper, {
+          useCORS: true,
+          allowTaint: true,
+          scale: 2,          // alta resolução
+          logging: false,
+          backgroundColor: null
+        });
+        return canvas.toDataURL('image/png');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── IMPRIMIR: gera PNG e imprime via iframe (sem popup) ─
+    window.imprimir = async () => {
+      try {
+        const dataUrl = await gerarImagemFicha();
+
+        // Cria iframe invisível — não é bloqueado pelo browser
+        const iframe = document.createElement('iframe');
+        iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:16cm;height:11cm;border:none;';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:white; }
+    img { display:block; width:16cm; height:11cm; }
+    @media print {
+      @page { margin:0; size:16cm 11cm landscape; }
+      img { width:16cm; height:11cm; }
+    }
+  </style>
+</head>
+<body>
+  <img src="${dataUrl}"/>
+</body>
+</html>`);
+        doc.close();
+
+        iframe.onload = () => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          setTimeout(() => iframe.remove(), 2000);
+        };
+      } catch (e) {
+        alert('Erro ao gerar imagem para impressão: ' + e.message);
+      }
+    };
+
+    // ── BAIXAR PNG ─────────────────────────────────────────
+    window.baixarPNG = async () => {
+      try {
+        const dataUrl = await gerarImagemFicha();
+        const nomePassaro = (document.getElementById('span-nomePassaro').textContent || 'passaro')
+          .replace(/[^a-zA-Z0-9\u00C0-\u00FF\s]/g, '').trim().replace(/\s+/g, '_');
+        const link = document.createElement('a');
+        link.download = `ficha_${nomePassaro}.png`;
+        link.href = dataUrl;
+        link.click();
+      } catch (e) {
+        alert('Erro ao baixar PNG: ' + e.message);
+      }
+    };
+
+    window.irParaEdicao = () => {
+      const id = passaroId || (dadosAtivos && dadosAtivos.id);
+      const dados = dadosAtivos || {};
+      if (id) {
+        sessionStorage.setItem('editar_id',    id);
+        sessionStorage.setItem('editar_dados', JSON.stringify({ ...dados, id }));
+      }
+      window.location.href = 'editar.html';
+    };
+  </script>
+
+</body>
+</html>

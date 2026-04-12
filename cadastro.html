@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Cadastro e edição de pássaro — Criatório Igarapava" />
+  <title>Cadastro de Pássaro — Criatório Igarapava</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <nav class="sidebar" role="navigation" aria-label="Navegação principal">
+
+
+
+    <button class="sidebar-btn" onclick="window.location.href='index.html'" aria-label="Ver lista de pássaros">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+      </svg>
+      <span class="tooltip">LISTA DE PÁSSAROS</span>
+    </button>
+
+    <button class="sidebar-btn active" aria-label="Adicionar pássaro">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      <span class="tooltip">ADICIONAR PÁSSARO</span>
+    </button>
+
+  </nav>
+
+  <!-- ── Main Content ──────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <span class="topbar-title">CRIATÓRIO IGARAPAVA — CANTO E REPETIÇÃO DE CURIÓS</span>
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        <span id="status-text">ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Page -->
+    <section class="page-area">
+
+      <div class="section-header">
+        <h1 class="section-title" id="page-title">Novo Pássaro</h1>
+        <p class="section-subtitle">Preencha todos os campos. A borda do campo "Nome do Pássaro" muda conforme o sexo.</p>
+      </div>
+
+      <div class="ficha-wrapper-container" style="max-width: 1200px; margin: 0 auto; width: 100%;">
+        <form id="form-passaro" novalidate>
+          <div class="ficha-wrapper" style="position: relative; width: 100%; aspect-ratio: 12050 / 9050; background-image: url('assets/ficha_original.png'); background-size: contain; background-repeat: no-repeat; background-position: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 8px;">
+            
+            <!-- Inputs transparentes sobrepostos -->
+            <input type="text" id="campo1" name="nome" required autocomplete="off" style="position: absolute; top: 20.37%; left: 14%; width: 29.37%; height: 7.81%;" class="input-transparente" title="Nome" />
+            <input type="text" id="campo2" name="codigo" autocomplete="off" style="position: absolute; top: 29.88%; left: 1.69%; width: 41.68%; height: 7.81%;" class="input-transparente" title="Código" />
+            <input type="text" id="campo3" name="dataNascimento" autocomplete="off" inputmode="numeric" maxlength="10" style="position: absolute; top: 20.37%; left: 52.80%; width: 41.68%; height: 7.81%;" class="input-transparente" title="Data de Nascimento" />
+            <select id="campo4" name="sexo" required style="position: absolute; top: 29.88%; left: 65%; width: 29.48%; height: 7.81%; cursor: pointer;" class="input-transparente" title="Sexo">
+              <option value="MACHO">MACHO</option>
+              <option value="FÊMEA">FÊMEA</option>
+            </select>
+            
+            <!-- Campo 5 (Nome do Pássaro) tem borda dinâmica de acordo com o JS e CSS -->
+            <input type="text" id="campo5" name="nomePassaro" required autocomplete="off" style="position: absolute; top: 63.91%; left: 1.56%; width: 37.22%; height: 10.08%;" class="input-transparente campo5-borda" title="Nome do Pássaro" />
+
+            <!-- Árvore Genealógica -->
+            <input type="text" id="campo6" name="paiPassaro5" autocomplete="off" style="position: absolute; top: 49.84%; left: 19.13%; width: 24.81%; height: 8.88%;" class="input-transparente" title="Pai (Nível 1)" />
+            <input type="text" id="campo7" name="maePassaro5" autocomplete="off" style="position: absolute; top: 79.74%; left: 19.13%; width: 24.81%; height: 8.85%;" class="input-transparente" title="Mãe (Nível 1)" />
+            
+            <input type="text" id="campo8" name="paiPassaro6" autocomplete="off" style="position: absolute; top: 42.48%; left: 45.81%; width: 24.81%; height: 8.95%;" class="input-transparente" title="Avô Paterno" />
+            <input type="text" id="campo9" name="maePassaro6" autocomplete="off" style="position: absolute; top: 57.70%; left: 45.81%; width: 24.81%; height: 9.00%;" class="input-transparente" title="Avó Paterna" />
+            <input type="text" id="campo10" name="paiPassaro7" autocomplete="off" style="position: absolute; top: 72.68%; left: 45.81%; width: 24.81%; height: 8.99%;" class="input-transparente" title="Avô Materno" />
+            <input type="text" id="campo11" name="maePassaro7" autocomplete="off" style="position: absolute; top: 87.73%; left: 45.81%; width: 24.81%; height: 8.90%;" class="input-transparente" title="Avó Materna" />
+
+            <input type="text" id="campo12" name="paiPassaro8" autocomplete="off" style="position: absolute; top: 39.74%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavô Paterno 1" />
+            <input type="text" id="campo13" name="maePassaro8" autocomplete="off" style="position: absolute; top: 47.30%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavó Paterna 1" />
+            <input type="text" id="campo14" name="paiPassaro9" autocomplete="off" style="position: absolute; top: 54.82%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavô Paterno 2" />
+            <input type="text" id="campo15" name="maePassaro9" autocomplete="off" style="position: absolute; top: 62.32%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavó Paterna 2" />
+            <input type="text" id="campo16" name="paiPassaro10" autocomplete="off" style="position: absolute; top: 69.54%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavô Materno 1" />
+            <input type="text" id="campo17" name="maePassaro10" autocomplete="off" style="position: absolute; top: 77.06%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavó Materna 1" />
+            <input type="text" id="campo18" name="paiPassaro11" autocomplete="off" style="position: absolute; top: 84.67%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavô Materno 2" />
+            <input type="text" id="campo19" name="maePassaro11" autocomplete="off" style="position: absolute; top: 92.08%; left: 72.17%; width: 24.81%; height: 6.69%;" class="input-transparente" title="Bisavó Materna 2" />
+
+          </div>
+
+          <div class="form-actions" style="justify-content: flex-end; margin-top: 24px;">
+            <a href="index.html" class="btn btn-secondary" id="btn-cancelar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              CANCELAR
+            </a>
+            <button type="button" class="btn btn-primary" id="btn-salvar" onclick="handleSubmit_onclick(event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right: 8px;">
+                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+              SALVAR PÁSSARO
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Toast ─────────────────────────────────────────── -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ── Loading ───────────────────────────────────────── -->
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <script>
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      alert('ERRO GLOBAL: ' + msg + '\nLinha: ' + lineNo + '\nArquivo: ' + url);
+      return false;
+    };
+  </script>
+  <script type="module">
+    console.log('Módulo cadastro.html inicializando...');
+    import { salvarPassaro, buscarPassaro } from './js/cadastro.js';
+    import { FIREBASE_CONFIGURED } from './js/firebase-config.js';
+
+    // ── Estado ───────────────────────────────────────────
+    const params = new URLSearchParams(location.search);
+    // Tenta URL primeiro; se não vier, lê do sessionStorage (mesmo padrão do ficha.html)
+    let editId = params.get('id') || sessionStorage.getItem('editar_id') || null;
+    let dadosOriginais = null;
+
+    // ── Init ─────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        if (!FIREBASE_CONFIGURED) {
+          document.getElementById('status-text').textContent = 'OFFLINE';
+        }
+
+        // Máscara de data
+        document.getElementById('campo3').addEventListener('input', mascaraData);
+
+        // Borda dinâmica campo 5
+        document.getElementById('campo4').addEventListener('change', atualizarCorBorda);
+        atualizarCorBorda(); // estado inicial
+
+        // Modo edição
+        if (editId) {
+          document.getElementById('page-title').textContent    = 'Editar Pássaro';
+          document.getElementById('breadcrumb').textContent    = '/ editar';
+          document.querySelector('.section-subtitle').textContent = 'Altere os campos desejados e clique em Salvar Alterações.';
+          document.getElementById('btn-cancelar').href         = 'javascript:history.back()';
+          document.getElementById('btn-salvar').innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            SALVAR ALTERAÇÕES
+          `;
+          await carregarParaEdicao(editId);
+        }
+      } catch (err) {
+        alert("CRITICAL INIT ERROR: " + err.message);
+      }
+    });
+
+    window.handleSubmit_onclick = handleSubmit;
+
+    // ── Preencher campos do formulário com os dados ──────
+    function preencherCampos(d) {
+      const mapa = {
+        campo1: 'nome',          campo2: 'codigo',
+        campo3: 'dataNascimento', campo4: 'sexo',
+        campo5: 'nomePassaro',
+        campo6: 'paiPassaro5',   campo7: 'maePassaro5',
+        campo8: 'paiPassaro6',   campo9: 'maePassaro6',
+        campo10: 'paiPassaro7',  campo11: 'maePassaro7',
+        campo12: 'paiPassaro8',  campo13: 'maePassaro8',
+        campo14: 'paiPassaro9',  campo15: 'maePassaro9',
+        campo16: 'paiPassaro10', campo17: 'maePassaro10',
+        campo18: 'paiPassaro11', campo19: 'maePassaro11',
+      };
+      for (const [campoId, chave] of Object.entries(mapa)) {
+        const el = document.getElementById(campoId);
+        if (el && d[chave] != null) el.value = d[chave];
+      }
+      atualizarCorBorda();
+    }
+
+    // ── Carregar dados para edição ───────────────────────
+    async function carregarParaEdicao(id) {
+      console.log('[editar] Carregando pássaro id:', id);
+      setLoading(true);
+      try {
+        // 1. Tenta sessionStorage primeiro (vem da ficha via irParaEdicao)
+        const sessaoStr = sessionStorage.getItem('editar_dados');
+        if (sessaoStr) {
+          try {
+            const sessao = JSON.parse(sessaoStr);
+            sessionStorage.removeItem('editar_dados');
+            sessionStorage.removeItem('editar_id');
+            dadosOriginais = sessao;
+            console.log('[editar] Dados do sessionStorage:', dadosOriginais);
+            preencherCampos(dadosOriginais);
+            return;
+          } catch {}
+        }
+
+        // 2. Fallback: busca no banco
+        dadosOriginais = await buscarPassaro(id);
+        console.log('[editar] dadosOriginais do banco:', dadosOriginais);
+
+        if (!dadosOriginais) {
+          alert('Pássaro não encontrado. Pode ter sido deletado ou o ID é inválido.\n\nVocê será redirecionado para a lista.');
+          window.location.href = 'index.html';
+          return;
+        }
+
+        preencherCampos(dadosOriginais);
+      } catch (e) {
+        alert('Erro ao carregar dados do pássaro:\n' + e.message);
+        window.location.href = 'index.html';
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── Submetendo formulário ────────────────────────────
+    async function handleSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      console.log('--- BOTÃO SALVAR ACIONADO ---');
+
+      const dados = {
+        nome:            document.getElementById('campo1').value.trim(),
+        codigo:          document.getElementById('campo2').value.trim(),
+        dataNascimento:  document.getElementById('campo3').value.trim(),
+        sexo:            document.getElementById('campo4').value,
+        nomePassaro:     document.getElementById('campo5').value.trim(),
+        paiPassaro5:     document.getElementById('campo6').value.trim(),
+        maePassaro5:     document.getElementById('campo7').value.trim(),
+        paiPassaro6:     document.getElementById('campo8').value.trim(),
+        maePassaro6:     document.getElementById('campo9').value.trim(),
+        paiPassaro7:     document.getElementById('campo10').value.trim(),
+        maePassaro7:     document.getElementById('campo11').value.trim(),
+        paiPassaro8:     document.getElementById('campo12').value.trim(),
+        maePassaro8:     document.getElementById('campo13').value.trim(),
+        paiPassaro9:     document.getElementById('campo14').value.trim(),
+        maePassaro9:     document.getElementById('campo15').value.trim(),
+        paiPassaro10:    document.getElementById('campo16').value.trim(),
+        maePassaro10:    document.getElementById('campo17').value.trim(),
+        paiPassaro11:    document.getElementById('campo18').value.trim(),
+        maePassaro11:    document.getElementById('campo19').value.trim(),
+      };
+
+      if (!dados.nome) { showToast('O campo NOME é obrigatório.', 'error'); return; }
+      if (!dados.nomePassaro) { showToast('O campo NOME DO PÁSSARO é obrigatório.', 'error'); return; }
+
+      setLoading(true);
+      try {
+        const novoId = await salvarPassaro(dados, editId || null);
+        console.log('[salvar] novoId:', novoId);
+        if (!novoId) throw new Error('ID não retornado pelo banco de dados.');
+        // Guarda o ID e os dados no sessionStorage como backup
+        sessionStorage.setItem('ficha_id', novoId);
+        sessionStorage.setItem('ficha_dados', JSON.stringify({ ...dados, id: novoId }));
+        showToast(editId ? 'Pássaro atualizado com sucesso!' : 'Pássaro cadastrado com sucesso!');
+        setTimeout(() => { window.location.href = `ficha.html?id=${novoId}`; }, 800);
+      } catch (err) {
+        console.error("ERRO AO SALVAR:", err);
+        alert('ERRO AO SALVAR: ' + err.message);
+        showToast('Erro ao salvar: ' + err.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── Borda dinâmica campo 5 ───────────────────────────
+    function atualizarCorBorda() {
+      const sexo   = document.getElementById('campo4').value;
+      const campo5 = document.getElementById('campo5');
+      campo5.classList.remove('borda-femea', 'borda-macho');
+      campo5.classList.add(sexo === 'FÊMEA' ? 'borda-femea' : 'borda-macho');
+    }
+
+    // ── Máscara dd/mm/aaaa ───────────────────────────────
+    function mascaraData(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 8);
+      if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2);
+      if (v.length >= 6) v = v.substring(0,5) + '/' + v.substring(5);
+      e.target.value = v;
+    }
+
+    // ── Helpers ──────────────────────────────────────────
+    function showToast(msg, tipo = 'success') {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = `toast ${tipo}`;
+      t.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          ${tipo === 'error'
+            ? '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
+            : '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'}
+        </svg>
+        ${msg}
+      `;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    function setLoading(v) {
+      document.getElementById('loading').style.display = v ? 'flex' : 'none';
+    }
+  </script>
+
+</body>
+</html>
